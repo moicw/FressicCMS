@@ -1,0 +1,26 @@
+<ion-content [fullscreen]="true" class="background" >
+
+
+  <div id="container" style="height: 100%;" >
+   <!--<img src="assets/images/logo.png" style="height:150px;width:150px;background-color:#FFFFFF;border-radius:100px">
+   -->
+   <div class="middle_conn">
+    
+    <div style="background-color: #222222;opacity:0.8;padding:20px;border-radius:10px">
+        <div style="text-align: center;width: 100%;">
+          <img  src="../../assets/images/logo.png">
+        </div>
+        <ion-input class="form-input" placeholder="Enter Email" [(ngModel)]="email"  ></ion-input>
+        <ion-input class="form-input" type="password" placeholder="Enter Your Password " [(ngModel)]="password" (keyup.enter)="login()" ></ion-input>
+        <!--<ion-checkbox  class="check-box" value="option" (ionChange)="isChecked($event)" name="option" (keyup.enter)="login()"></ion-checkbox><ion-label for="rememberMe" style="padding-left:5px;font-size: 15px;color: #ffffff;">Remember me</ion-label>
+        <br>--><ion-label style="font-size: 13px;color: red;">{{message}}</ion-label>
+        <ion-progress-bar *ngIf="logininprogress == true"style="--progress-background: var(--custom-color-theme1);--background:var(--custom-color-theme2);" type="indeterminate"></ion-progress-bar>
+        <ion-button class="form-button"  (keypress)="login()" (click)="login()">LOGIN</ion-button>
+        <div style="text-align: right;width: 100%; padding-top:10px;color:#888888;font-size:10px">
+         V 0.0.1
+        </div>
+    </div>
+   
+  </div>
+  </div>
+</ion-content>

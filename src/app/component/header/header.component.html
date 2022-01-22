@@ -1,0 +1,34 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar >
+
+    <div id="container">
+      <div id="div1">
+        <ion-buttons slot="start">
+          <ion-menu-button style="--color:var(--custom-color-theme1)"></ion-menu-button>
+        </ion-buttons>
+
+        <ion-title >
+        
+        </ion-title>
+        <ion-buttons slot="end" style="padding-right:10px">
+          <ion-icon class="top_menu_icon" name="notifications-outline"></ion-icon>
+        </ion-buttons>
+        <ion-buttons slot="end" style="padding-right:10px">
+          <ion-icon class="top_menu_icon" name="settings-outline"></ion-icon>
+        </ion-buttons>
+        <ion-buttons slot="end" style="padding-right:10px" (click)="presentPopover($event)">
+          <ion-icon class="top_menu_icon" name="person-circle-outline"></ion-icon>
+        </ion-buttons>
+
+      </div>
+      <div id="div2"></div>
+  </div>
+  </ion-toolbar>
+  <div id="container" style="background-color: var(--custom-color-theme2);">
+    <div id="div1">
+      <ion-title >
+        {{title}}
+      </ion-title>
+    </div>
+  </div>
+</ion-header>

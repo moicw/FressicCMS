@@ -1,5 +1,13 @@
 {
   "name": "cms",
-  "integrations": {},
-  "type": "angular"
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "proxies": [
+    {
+      "path": "/rest",
+      "proxyUrl": "https://fressicentertainment.com/rest"
+    }
+  ]
 }

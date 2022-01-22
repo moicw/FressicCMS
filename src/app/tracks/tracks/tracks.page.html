@@ -1,0 +1,554 @@
+<app-header [title]='header_title'></app-header>
+
+<ion-content #content>
+  <ion-grid > 
+    <ion-row> 
+      <ion-button class="button_style1"(click)="submit_new_track()"><ion-icon name="add-outline"></ion-icon> Submit New Track</ion-button>
+    </ion-row>
+   <ion-row style="padding-top:10px"> 
+      <ion-col size="12" size-sm="4"  *ngFor="let track of track_info;let i = index">
+        <div size="12" class="user_box">
+          <div class="column">
+            <div style="width:100%;">
+              <div class="column1" style="width:100%;min-height:180px">
+                <div style="min-width:100%" >
+                  <div class="user_title">{{track.track_title}}</div>
+                  <div style="min-width:100%">
+                    <div class="column2" >
+                    <ion-col size="4" >
+                      <img [src]="track.track.cover" style="width:100%">
+                    </ion-col>
+                    <ion-col size="8">
+                      <div class="user_info">Uploaded on {{track.track_added}}</div>
+                      <div class="user_info" style="padding-top:10px">Language : {{track.track_language}}</div>
+                      <div class="user_info">Genre : {{track.track_genre}}</div>
+                      <div class="user_info">Status : 
+                        <font *ngIf="track.track_approve==true" style="color:#00ff00">Approved</font>
+                        <font *ngIf="track.track_reject==true && track.track_approve==false" style="color:#ff0000">Rejected</font>
+                        <font *ngIf="track.track_reject==false && track.track_approve==false" style="color: #888888">Pending</font>
+                      </div>
+                    </ion-col>
+                    </div>
+                    <div>
+                      <!--<ion-row style="width:100%" class="player_bg">
+                        <ion-col size="12" size-sm="12" style="padding:0px">
+                          <div style="padding:0px">
+                            <audio id="{{'audio_player'+i}}" controls style="width:100% !important;padding:0px" (play)="audioPlay($event,track.track.preview)" controls preload="none" controlsList="nodownload noplaybackrate" [src]="track.track.preview" type="audio/mp3">
+                             Your browser does not support the audio element.
+                              </audio>
+                          </div>
+                        </ion-col>
+                      </ion-row>-->
+
+                      <ion-row style="width:100%" >
+                        <ion-col size="12" size-sm="12" style="padding:0px">
+                          <div class="track_info">Preview</div>
+                          </ion-col>
+                      </ion-row>
+                      <ion-row style="width:100%" class="player_bg">
+                        <ion-col size="12" size-sm="12" style="padding:0px">
+                          <div style="padding:0px">
+                            <audio id="audio_player_preview" controls style="width:100% !important;padding:0px" (play)="audioPlay($event,track.track.preview)" controls preload="none" controlsList="nodownload noplaybackrate" [src]="track.track.preview" type="audio/mp4">
+                             Your browser does not support the audio element.
+                              </audio>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row style="width:100%" >
+                        <ion-col size="12" size-sm="12" style="padding:0px">
+                          <div class="track_info">Full Track</div>
+                          </ion-col>
+                      </ion-row>
+                      <ion-row style="width:100%" class="player_bg">
+                        <ion-col size="12" size-sm="12" style="padding:0px">
+                          <div style="padding:0px">
+                            <audio id="audio_player" controls style="width:100% !important;padding:0px" (play)="audioPlay($event,track.track.audio)" controls preload="none" controlsList="nodownload noplaybackrate" [src]="track.track.audio" type="audio/mp4">
+                              Your browser does not support the audio element.
+                              </audio>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                   
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column2" >
+                  <ion-col size="4" class="ctrl_btn"  (click)="track_detail(track)">
+                    <ion-icon name="list-circle-outline" class="icon-button"></ion-icon>
+                   <br><font style="font-size: 13px; color:#888888;">Details</font>
+                  </ion-col>
+                  <ion-col size="4" class="ctrl_btn1"  (click)="approve_new_request(track,track.track_author)">
+                    <ion-icon name="checkmark-circle-outline" class="icon-button"></ion-icon>
+                  <br><font style="font-size: 13px; color:#888888;">Approve</font>
+                  </ion-col>
+                  <ion-col size="4" class="ctrl_btn1" (click)="delete_new_request(track.track_id,track.track_author)">
+                    <ion-icon name="ban-outline" class="icon-button" ></ion-icon>
+                  <br><font style="font-size: 13px; color:#888888;">Reject</font>
+                </ion-col>
+              
+              </div>
+            </div>
+           
+          </div>
+         
+        </div>
+      
+      </ion-col>
+      
+      
+    </ion-row>
+    <ion-row style="width:100%; padding-top:20px" class="item_center">
+      <ion-button class="loadmore" (click)="load_more()"> 
+        Load More
+      </ion-button>
+    </ion-row>
+  </ion-grid>
+ 
+
+</ion-content>
+
+
+<!-- Music  Modal -->
+<div id="track_Modal" class="modal">
+
+
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" (click)="close_music_modal()">&times;</span>
+      <h4>Tracks</h4>
+    </div>
+    <div class="modal-body" style="height:85%">
+      <ion-row> 
+        <ion-col size="12" size-sm="7" >
+          <ion-row>
+            <ion-col size="12" size-sm="12">
+            <div size="12" class="music_box" *ngIf="selected_track_info != null">
+              <div class="row" style="width:100%;">
+                <ion-row style="width:100%;padding:10px;">     
+                <div class="track_info_title" *ngIf="selected_track_info.track_title != null">{{selected_track_info.track_title}}</div>
+                <div class="track_info_title" *ngIf="selected_track_info.track_title == null">Unknown</div>
+                </ion-row>
+                <ion-row style="width:100%;padding-left:5px;padding-right:5px;">
+                  <ion-col size="12" size-sm="4">
+                    <img [src]="selected_track_info.track.cover" style="height:80%;min-height: 150px;max-height: 150px;">
+                    <div class="track_info">Status : 
+                      <font *ngIf="selected_track_info.track_approve==true" style="color:#00ff00">Approved</font>
+                      <font *ngIf="selected_track_info.track_reject==true && selected_track_info.track_approve==false" style="color:#ff0000">Rejected</font>
+                      <font *ngIf="selected_track_info.track_reject==false && selected_track_info.track_approve==false" style="color: #888888">Pending</font>
+                    </div>
+                    <!--<div *ngIf="selected_track_info.track_approve == false">
+                      <div class="track_info_title" style="padding-left:5px;padding-bottom:5px;color:#ff0000">No</div>
+                    </div>
+                    <div *ngIf="selected_track_info.track_approve == true">
+                      <div class="track_info_title" style="padding-left:5px;padding-bottom:5px;color:#00ff00">Yes</div>
+                    </div>
+                    <div class="track_info">Reject</div>
+                    <div *ngIf="selected_track_info.track_reject == false">
+                      <div class="track_info_title" style="padding-left:5px;padding-bottom:5px;color:#00ff00">No</div>
+                    </div>
+                    <div *ngIf="selected_track_info.track_reject == true">
+                      <div class="track_info_title" style="padding-left:5px;padding-bottom:5px;color:#ff0000">Yes</div>
+                    </div>-->
+                  </ion-col>
+                  <ion-col size="12" size-sm="8">
+                        <!--<div class="track_info">Uploaded on {{selected_track_info.track_added.toDate().toDateString() }}</div>-->
+                        <div class="track_info">Language : {{selected_track_info.track_language}}</div>
+                        <div class="track_info">Genre : {{selected_track_info.track_genre}}</div>
+                        <div class="track_info">Lyrics</div>
+                        <div class="track_info_lyrics" [innerHtml]="selected_track_info.track_lyric"></div>
+                  </ion-col>
+                </ion-row>
+                <ion-row style="width:100%" >
+                  <ion-col size="12" size-sm="12" style="padding:0px">
+                    <div class="track_info">Preview</div>
+                    </ion-col>
+                </ion-row>
+                <ion-row style="width:100%" class="player_bg">
+                  <ion-col size="12" size-sm="12" style="padding:0px">
+                    <div style="padding:0px">
+                      <audio id="audio_player_preview_big" controls style="width:100% !important;padding:0px" (play)="audioPlay($event,selected_track_info.track.preview)" controls preload="none" controlsList="nodownload noplaybackrate" [src]="selected_track_info.track.preview" type="audio/mp4">
+                       Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-row style="width:100%" >
+                  <ion-col size="12" size-sm="12" style="padding:0px">
+                    <div class="track_info">Full Track</div>
+                    </ion-col>
+                </ion-row>
+                <ion-row style="width:100%" class="player_bg">
+                  <ion-col size="12" size-sm="12" style="padding:0px">
+                    <div style="padding:0px">
+                      <audio id="audio_player_big" controls style="width:100% !important;padding:0px" (play)="audioPlay($event,selected_track_info.track.audio)" controls preload="none" controlsList="nodownload noplaybackrate" [src]="selected_track_info.track.audio" type="audio/mp4">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <div class="column2" >
+                    <ion-col size="4" class="ctrl_btn1">
+                      <ion-icon name="create-outline" class="icon-button"></ion-icon>
+                    <br><font style="font-size: 13px; color:#888888;">Edit</font>
+                    </ion-col>
+                    <ion-col size="4" class="ctrl_btn1" (click)="approve_new_request_modal(selected_track_info,selected_track_info.track_author)">
+                      <ion-icon name="checkmark-circle-outline" class="icon-button"></ion-icon>
+                    <br><font style="font-size: 13px; color:#888888;">Approve</font>
+                    </ion-col>
+                    <ion-col size="4" class="ctrl_btn1" (click)="delete_new_request_modal(selected_track_info.track_id,selected_track_info.track_author)">
+                      <ion-icon name="ban-outline" class="icon-button" ></ion-icon>
+                    <br><font style="font-size: 13px; color:#888888;">Reject</font>
+                    </ion-col>
+                      
+                  </div>
+                </ion-row>
+              </div>
+              
+            </div>
+          </ion-col>
+          </ion-row>
+         
+        </ion-col>
+       <ion-col size="12" size-sm="5">
+      <ion-row *ngIf="selected_artist != null">
+        <ion-col size="12" size-sm="12">
+          <div class="track_info_title">Author Details</div>
+        </ion-col>
+        <ion-col size="12" size-sm="12">
+          <div class="row" style="width:100%;">
+            <ion-row style="width:100%;">     
+              <img [src]="selected_artist.image.artist_cover_image" style="height:150px">
+            </ion-row>
+            <ion-row style="width:100%;">
+              <ion-col size="12" size-sm="4"><div class="track_info_title_bold">Name </div></ion-col>
+              <ion-col size="12" size-sm="8"><div class="track_info_title">{{selected_artist.name}}</div></ion-col>
+             
+            </ion-row>
+            <ion-row style="width:100%;">
+              <ion-col size="12" size-sm="4"><div class="track_info_title_bold">Email </div></ion-col>
+              <ion-col size="12" size-sm="8"><div class="track_info_title">{{selected_artist.email}}</div></ion-col>
+          
+            </ion-row>
+            <ion-row style="width:100%;">
+              <ion-col size="12" size-sm="4"><div class="track_info_title_bold">Username </div></ion-col>
+              <ion-col size="12" size-sm="8"><div class="track_info_title">{{selected_artist.username}}</div></ion-col>
+          
+            </ion-row>
+            <ion-row style="width:100%;">
+              <ion-col size="12" size-sm="4"><div class="track_info_title_bold">Artist </div></ion-col>
+              <ion-col size="12" size-sm="8"><div class="track_info_title">
+                <div *ngIf="selected_artist.artist_verify == false">
+                  <div class="track_info_title" style="padding-bottom:5px;color:#ff0000">No</div>
+                </div>
+                <div *ngIf="selected_artist.artist_verify == true">
+                  <div class="track_info_title" style="padding-bottom:5px;color:#00ff00">Yes</div>
+                </div>
+
+              </div></ion-col>
+          
+            </ion-row>
+            <ion-row style="width:100%;">
+              <ion-col size="12" size-sm="4"><div class="track_info_title_bold">DOB </div></ion-col>
+              <ion-col size="12" size-sm="8"><div class="track_info_title">{{selected_artist.dob}}</div></ion-col>
+          
+            </ion-row>
+            <ion-row style="width:100%;">
+              <ion-col size="12" size-sm="4"><div class="track_info_title_bold">Gender </div></ion-col>
+              <ion-col size="12" size-sm="8"><div class="track_info_title">{{selected_artist.gender}}</div></ion-col>
+          
+            </ion-row>
+            <ion-row style="width:100%;">
+              <ion-col size="12" size-sm="4"><div class="track_info_title_bold">Language </div></ion-col>
+              <ion-col size="12" size-sm="8"><div class="track_info_title">{{selected_artist.language}}</div></ion-col>
+          
+            </ion-row>
+            <ion-row style="width:100%;">
+              <ion-col size="12" size-sm="4"><div class="track_info_title_bold">Join Date </div></ion-col>
+              <ion-col size="12" size-sm="8"><div class="track_info_title">{{selected_artist.join_date.seconds  * 1000 | date:'dd/MM/yyyy(EEE) - hh:mmaaa'}}</div></ion-col>
+          
+            </ion-row>
+            
+          </div>
+        </ion-col>
+      </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+  
+  </div>
+
+</div>
+
+<!---Edit User Modal -->
+<div id="edit_modal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" (click)="close_edit_modal()">&times;</span>
+      <h4>Edit</h4>
+    </div>
+    <div class="modal-body" style="height:82%">
+      <ion-row  *ngIf="selected_track == null"> 
+        <ion-col size="12" size-sm="6" >
+ 
+                  <ion-row style="width:100%;padding-left:5px;padding-right:5px;">
+                    <ion-col size="12" size-sm="12">
+                        <ion-row>
+                          <ion-col size="7" size-sm="7">
+                            <!--<div class="image_container">
+                              <img [src]="upload_track_cover" style="height:80%;min-height: 200px;max-height: 200px;">
+                              <ion-icon name="cloud-upload-outline" class="icon-button btn" (click)="reupload_artist()"></ion-icon>
+                            </div>-->
+                            
+                            <!--<input type="file" id="artist_cover" style="display: none;" (change)="fileChanged($event)"/>-->
+                            <input type="file" (change)="fileChangeEvent($event)" accept="image/*"/>
+
+                            <div  style="width:100%">
+                                <image-cropper
+                               
+                                    [imageChangedEvent]="imageChangedEvent"
+                                    [maintainAspectRatio]="true"
+                                    [containWithinAspectRatio]="false"
+                                    [aspectRatio]="1"
+                                    [resizeToWidth]="800"
+                                    [cropperMinWidth]="800"
+                                    
+                                    [roundCropper]="false"
+                                    [canvasRotation]="canvasRotation"
+                                    [transform]="transform"
+                                    [alignImage]="'left'"
+                                    [style.display]="showCropper ? null : 'none'"
+                                    format="jpg"
+                                    (imageCropped)="imageCropped($event)"
+                                    (imageLoaded)="imageLoaded()"
+                                    (cropperReady)="cropperReady($event)"
+                                    (loadImageFailed)="loadImageFailed()"
+                                ></image-cropper>
+                            </div>
+                            <br>
+                            <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
+                
+                          </ion-col>
+                        
+                        </ion-row>
+                       
+                        
+                        <!--<div class="track_info_title" style="padding-bottom:5px;">Username</div>
+                        <ion-input class="form-input-theme1" [(ngModel)]="selected_artist.data.username"></ion-input>
+                        <div class="track_info_title" style="padding-bottom:5px;">Email</div>
+                        <ion-input class="form-input-theme1" [(ngModel)]="selected_artist.data.email"></ion-input>
+                        <div class="track_info_title" style="padding-bottom:5px;">DOB</div>
+                        <input type="date" class="form-date-theme1"  [(ngModel)]="selected_artist.data.dob">
+                        -->
+                    </ion-col>
+                  </ion-row>
+      
+         
+        </ion-col>
+        <ion-col size="12" size-sm="6">
+         
+          <ion-row style="width:100%;padding-left:5px;padding-right:5px;">
+            <ion-col size="12" size-sm="12">
+              <div class="track_info_title" style="padding-bottom:5px;">Title</div>
+              <ion-input class="form-input-theme1" [(ngModel)]="track.track_title" ></ion-input>
+              <div class="track_info_title" style="padding-bottom:5px;">Language</div>
+      <select class="form-date-theme1" name="language" id="language" [(ngModel)]="track.track_language" >
+        <option value="Afrikaans">Afrikaans</option>
+        <option value="Albanian">Albanian</option>
+        <option value="Amharic">Amharic</option>
+        <option value="Arabic">Arabic</option>
+        <option value="Aragonese">Aragonese</option>
+        <option value="Armenian">Armenian</option>
+        <option value="Asturian">Asturian</option>
+        <option value="Azerbaijani">Azerbaijani</option>
+        <option value="Basque">Basque</option>
+        <option value="Belarusian">Belarusian</option>
+        <option value="Bengali">Bengali</option>
+        <option value="Bosnian">Bosnian</option>
+        <option value="Breton">Breton</option>
+        <option value="Bulgarian">Bulgarian</option>
+        <option value="Catalan">Catalan</option>
+        <option value="Central Kurdish">Central Kurdish</option>
+        <option value="Chinese">Chinese</option>
+        <option value="Corsican">Corsican</option>
+        <option value="Croatian">Croatian</option>
+        <option value="Czech">Czech</option>
+        <option value="Danish">Danish</option>
+        <option value="Dutch">Dutch</option>
+        <option value="English">English</option>
+        <option value="Esperanto">Esperanto</option>
+        <option value="Estonian">Estonian</option>
+        <option value="Faroese">Faroese</option>
+        <option value="Filipino">Filipino</option>
+        <option value="Finnish">Finnish</option>
+        <option value="French">French</option>
+        <option value="Galician">Galician</option>
+        <option value="Georgian">Georgian</option>
+        <option value="German">German</option>
+        <option value="Greek">Greek</option>
+        <option value="Guarani">Guarani</option>
+        <option value="Gujarati">Gujarati</option>
+        <option value="Hausa">Hausa</option>
+        <option value="Hawaiian">Hawaiian</option>
+        <option value="Hebrew">Hebrew</option>
+        <option value="Hindi">Hindi</option>
+        <option value="Hungarian">Hungarian</option>
+        <option value="Icelandic">Icelandic</option>
+        <option value="Indonesian">Indonesian</option>
+        <option value="Interlingua">Interlingua</option>
+        <option value="Irish">Irish</option>
+        <option value="Italian">Italian</option>
+        <option value="Japanese">Japanese</option>
+        <option value="Kannada">Kannada</option>
+        <option value="Kazakh">Kazakh</option>
+        <option value="Khmer">Khmer</option>
+        <option value="Korean">Korean</option>
+        <option value="Kurdish">Kurdish</option>
+        <option value="Kyrgyz">Kyrgyz</option>
+        <option value="Lao">Lao</option>
+        <option value="Latin">Latin</option>
+        <option value="Latvian">Latvian</option>
+        <option value="Lingala">Lingala</option>
+        <option value="Lithuanian">Lithuanian</option>
+        <option value="Macedonian">Macedonian</option>
+        <option value="Malay">Malay</option>
+        <option value="Malayalam">Malayalam</option>
+        <option value="Maltese">Maltese</option>
+        <option value="Marathi">Marathi</option>
+        <option value="Mongolian">Mongolian</option>
+        <option value="Nepali">Nepali</option>
+        <option value="Norwegian">Norwegian</option>
+        <option value="Occitan">Occitan</option>
+        <option value="Oriya">Oriya</option>
+        <option value="Oromo">Oromo</option>
+        <option value="Pashto">Pashto</option>
+        <option value="Persian">Persian</option>
+        <option value="Polish">Polish</option>
+        <option value="Portuguese">Portuguese</option>
+        <option value="Punjabi">Punjabi</option>
+        <option value="Quechua">Quechua</option>
+        <option value="Romanian">Romanian</option>
+        <option value="Romansh">Romansh</option>
+        <option value="Russian">Russian</option>
+        <option value="Scottish Gaelic">Scottish Gaelic</option>
+        <option value="Serbian">Serbian</option>
+        <option value="Serbo">Serbo</option>
+        <option value="Shona">Shona</option>
+        <option value="Sindhi">Sindhi</option>
+        <option value="Sinhala">Sinhala</option>
+        <option value="Slovak">Slovak</option>
+        <option value="Slovenian">Slovenian</option>
+        <option value="Somali">Somali</option>
+        <option value="Southern Sotho">Southern Sotho</option>
+        <option value="Spanish">Spanish</option>
+        <option value="Sundanese">Sundanese</option>
+        <option value="Swahili">Swahili</option>
+        <option value="Swedish">Swedish</option>
+        <option value="Tajik">Tajik</option>
+        <option value="Tamil">Tamil</option>
+        <option value="Tatar">Tatar</option>
+        <option value="Telugu">Telugu</option>
+        <option value="Thai">Thai</option>
+        <option value="Tigrinya">Tigrinya</option>
+        <option value="Tongan">Tongan</option>
+        <option value="Turkish">Turkish</option>
+        <option value="Turkmen">Turkmen</option>
+        <option value="Twi">Twi</option>
+        <option value="Ukrainian">Ukrainian</option>
+        <option value="Urdu">Urdu</option>
+        <option value="Uyghur">Uyghur</option>
+        <option value="Uzbek">Uzbek</option>
+        <option value="Vietnamese">Vietnamese</option>
+        <option value="Walloon">Walloon</option>
+        <option value="Welsh">Welsh</option>
+        <option value="Western Frisian">Western Frisian</option>
+        <option value="Xhosa">Xhosa</option>
+        <option value="Yiddish">Yiddish</option>
+        <option value="Yoruba">Yoruba</option>
+        <option value="Zulu">Zulu</option>
+    </select>
+              <div class="track_info_title" style="padding-bottom:5px;">Genre</div>
+              <select class="form-date-theme1" name="genre" id="genre" [(ngModel)]="track.track_genre">
+                <option value="blues">Blues</option>
+                <option value="country">Country</option>
+                <option value="dance">Dance</option>
+                <option value="electronic">Electronic</option>
+                <option value="folk">Folk</option>
+                <option value="funk">Funk</option>
+                <option value="gospel">Gospel</option>
+                <option value="heavy metal">Heavy Metal</option>
+                <option value="hip hop">Hip Hop</option>
+                <option value="indie">Indie</option>
+                <option value="jazz">Jazz</option>
+                <option value="oldies">Oldies</option>
+                <option value="pop">Pop</option>
+                <option value="reggae">Reggae</option>
+                <option value="rock">Rock</option>
+                <option value="r&b">R&B</option>
+                <option value="soul">Soul</option>
+                <option value="others">Others</option>
+                </select>
+             <div class="track_info_title" style="padding-bottom:5px;">Preview Track (12s)</div>
+              <input type="file" id="preview_track" class="form-input-theme1" accept="audio/*">
+              <div class="track_info_title" style="padding-bottom:5px;">Full Track</div>
+              <input type="file" id="full_track"class="form-input-theme1" accept="audio/*">
+              <div class="track_info_title" style="padding-bottom:5px;">Lyrics</div>
+               <ion-textarea class="form-input-theme1" rows="14" [(ngModel)]="track.track_lyric"></ion-textarea>
+              
+               <!-- <div class="track_info_title" style="padding-bottom:5px;">Ethnic</div>
+                <select class="form-date-theme1" id="ethnic" name="ethnic"  [(ngModel)]="selected_artist.data.ethnic">
+                  <option value="asian">Asian</option>
+                  <option value="middle eastern">Middle Eastern</option>
+                  <option value="latino">Latino</option>
+                  <option value="causacisan">Causacisan</option>
+                  <option value="black">Black</option>
+                  <option value="others">Others</option>
+                </select>
+                <div *ngIf="selected_artist.data.ethnic == 'others'">
+                <div class="track_info_title" style="padding-bottom:5px;">Others Ethnic</div>
+                <input class="form-input-theme1" [value]="selected_artist.data.others_ethnic"></ion-input>
+              </div>
+                <div class="track_info_title" style="padding-bottom:5px;">Gender</div>
+              
+                <select class="form-date-theme1" id="usergender" name="usergender" [(ngModel)]="selected_artist.data.gender">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="non-binary">Non-Binary</option>
+                </select>-->
+            </ion-col>
+          </ion-row>
+        </ion-col>
+       
+        
+        
+      </ion-row>
+    </div>
+    <div class="modal-footer">
+      <ion-row>
+        <div class="column2" >
+            <ion-col size="3" class="ctrl_btn"(click)="save_track()" >
+              <ion-icon name="create-outline" class="icon-button"></ion-icon>
+            <br><font style="font-size: 13px; color:#888888;">Save </font>
+            </ion-col>
+            <ion-col size="3" class="ctrl_btn1">
+              <ion-icon name="create-outline" class="icon-button"></ion-icon>
+            <br><font style="font-size: 13px; color:#888888;">Change Password</font>
+            </ion-col>
+           <ion-col size="3" class="ctrl_btn1" (click)="block_artist(selected_artist.id)">
+              <ion-icon name="checkmark-circle-outline" class="icon-button"></ion-icon>
+            <br><font style="font-size: 13px; color:#888888;">Block</font>
+            </ion-col>
+            <ion-col size="3" class="ctrl_btn1" (click)="reject_newartist(selected_artist.id)">
+              <ion-icon name="ban-outline" class="icon-button" ></ion-icon>
+            <br><font style="font-size: 13px; color:#888888;">Reject</font>
+            </ion-col>
+        </div>
+      </ion-row>
+    </div>
+  </div>
+
+</div>
+

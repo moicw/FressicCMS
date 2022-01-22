@@ -1,0 +1,320 @@
+.user_box
+{
+    padding: 2px; 
+    min-height: 200px; 
+    border-radius: 3px; 
+    background-color: var(--custom-color-theme4);
+    background-position: top right; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+    
+    display: flex;
+}
+.user_title
+{
+    color:var(--custom-color-theme1);
+    font-size: 20px;
+}
+.user_info
+{
+    color:var(--custom-color-font1);
+    font-size: 13px;
+    vertical-align: middle;
+    line-height: 20px;
+    text-transform: capitalize;
+}
+
+
+.music_box
+{
+    padding: 0px; 
+    width:100%;
+   
+    border:1px solid  var(--custom-color-theme1);
+    background: linear-gradient(180deg, var(--custom-color-theme3), var(--custom-color-theme4));
+    display: flex;
+}
+
+/** Audio class **/
+audio
+{
+    height:18px;
+    padding:0px;
+
+}
+.player_bg{
+  background-color: var(--custom-color-theme1);
+  padding-top:3px;
+}
+audio::-webkit-media-controls-enclosure {
+    background-color: var(--custom-color-theme1);
+  
+}
+audio::-webkit-media-controls-play-button {
+    background-color: var(--custom-color-theme1);
+ 
+}
+audio::-webkit-media-controls-mute-button {
+  background-color: var(--custom-color-theme1);
+  
+} 
+audio::-webkit-media-controls-mute-button:hover {
+  background-color: var(--custom-color-theme1H1);
+  
+} 
+audio::-webkit-media-controls-play-button:hover {
+    background-color: var(--custom-color-theme1H1);
+}
+audio::-webkit-media-controls-current-time-display {
+    color: #ffffff;
+}
+audio::-webkit-media-controls-time-remaining-display {
+  color: #ffffff;
+}
+
+.column {
+    flex: 100%;
+    font-size:20px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  
+}
+.column2 {
+   
+  text-align: left;
+ 
+  display: flex;
+  
+  width:100%;
+  /*justify-content: center;*/
+  height: 70%;
+  flex-wrap: wrap;
+
+}
+
+.column1 {
+
+ 
+  font-size:20px;
+  display: flex;
+  width:100% !important;
+  padding:10px;
+  //justify-content: center;
+  height: 80%;
+ 
+  flex-wrap: wrap;
+
+  
+}
+.column2 ion-icon{
+  color:var(--custom-color-theme1);
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+    width:100%;
+}
+
+.track_info_title
+{
+  color:var(--custom-color-font1);
+  font-size: 15px;
+}
+.track_info_title_bold
+{
+  color:var(--custom-color-font1);
+  font-size: 15px;
+  font-weight: bold;
+}
+.track_info
+{
+    color:var(--custom-color-font1);
+    font-size: 13px;
+    text-transform: capitalize;
+    padding:5px;
+}
+.track_info_list
+{
+    color:var(--custom-color-font1);
+    font-size: 11px;
+    text-transform: capitalize;
+    padding:2px;
+}
+.track_info_lyrics
+{
+  color:var(--custom-color-font1);
+    font-size: 13px;
+    height:180px;
+    overflow-y: auto;
+    padding:5px;
+}
+
+.icon-button
+{
+    font-size: 25px;
+    color:var(--custom-color-theme1);
+}
+.item_center {
+    flex: 100%;
+    
+    font-size:20px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.loadmore
+{
+    --color: #ffffff;
+    margin-bottom: 10px;
+    padding-top:10px !important;
+    --border-radius: 5px;
+    text-transform: capitalize;
+    display: block;
+    margin: 0 auto;
+    height:50px;
+    --background:var(--custom-color-theme1);
+}
+
+.ctrl_btn
+{
+    text-align: center;
+    cursor:pointer;
+}
+.ctrl_btn:hover
+{
+   background-color:#202020;
+   cursor:pointer;
+}
+
+.ctrl_btn1
+{
+    text-align: center;
+    border-left:1px solid #111111;
+    cursor:pointer;
+}
+
+.ctrl_btn1:hover
+{
+   background-color:#202020;
+   cursor:pointer;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    
+    background-color: var(--custom-color-theme3);
+    margin: auto;
+    padding: 0;
+  
+    border: 1px solid var(--custom-color-theme1);
+    border-radius:5px;
+    width: 90%;
+    height: 650px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+   
+  }
+  @media (min-width: 240px) and (max-width: 768px) {
+    .modal-content {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      
+      background-color: var(--custom-color-theme3);
+      margin: auto;
+      padding: 0;
+    
+      border: 1px solid var(--custom-color-theme1);
+      border-radius:5px;
+      width: 100%;
+      height: 650px;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+     
+    }
+  }
+  
+  .close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .modal-header {
+    padding: 2px 16px;
+    background-color: var(--custom-color-theme3);
+    color: white;
+    border-radius:5px;
+  }
+  
+  .modal-body {padding: 2px 16px;
+    background-color: var(--custom-color-theme3);
+    overflow-y: auto;
+    height: 80%;
+  }
+    
+  
+  .modal-footer {
+    padding: 2px 16px;
+    background-color: var(--custom-color-theme3);
+    color: white;
+  }
+  .list_play
+  {
+    color: var(--custom-color-theme1);
+    font-size:40px;
+  }
+
+/** Image Container **/
+.image_container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.image_container img {
+  width: 100%;
+  height: auto;
+}
+
+.image_container .btn {
+  position: absolute;
+  top: 10%;
+  left: 90%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+ 
+  border: none;
+  cursor: pointer;
+  
+  text-align: center;
+}
+

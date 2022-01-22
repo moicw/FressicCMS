@@ -1,0 +1,73 @@
+<app-header [title]='header_title' ></app-header>
+
+<ion-content >
+
+  <ion-grid>
+    <ion-row size="12" >
+      <ion-col  size="6" size-sm="3">
+        <div size="12" class="dashboard_box" >
+          <div class="column1">
+            <div class="row">
+              <div class="col" class="dashboard_number">{{dashboard.total_users}}</div>
+              <div class="col" class="dashboard_title">Registered Users</div>
+            </div>
+          </div>
+          <div class="column2">
+            <div class="row"><ion-icon name="people-outline"></ion-icon>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col  size="6" size-sm="3">
+        <div size="12" class="dashboard_box">
+          
+          <div class="column1">
+            <div class="row">
+              <div class="col" class="dashboard_number">{{dashboard.total_artist}}</div>
+              <div class="col" class="dashboard_title">Active Artists</div>
+            </div>
+          </div>
+          <div class="column2">
+            <div class="row"><ion-icon name="mic-outline"></ion-icon>
+            </div>
+          </div>
+      </div>
+      </ion-col>
+      <ion-col  size="6" size-sm="3">
+        <div size="12" class="dashboard_box">
+          
+          <div class="column1">
+            <div class="row">
+              <div class="col" class="dashboard_number">{{dashboard.new_artist_request}}</div>
+              <div class="col" class="dashboard_title">New Request</div>
+            </div>
+          </div>
+          <div class="column2">
+            <div class="row"><ion-icon name="document-outline"></ion-icon>
+            </div>
+          </div>
+      </div>
+      </ion-col>
+      <ion-col  size="6" size-sm="3">
+
+        <div size="12" class="dashboard_box" >
+          
+          <div class="column1">
+            <div class="row">
+              <div class="col" class="dashboard_number">{{dashboard.total_tracks}}</div>
+              <div class="col" class="dashboard_title">Uploaded Tracks</div>
+            </div>
+          </div>
+          <div class="column2">
+            <div class="row"><ion-icon name="musical-notes-outline"></ion-icon>
+            </div>
+          </div>
+      </div>
+      </ion-col>
+    </ion-row>
+    
+    
+  </ion-grid>
+    
+ 
+</ion-content>
