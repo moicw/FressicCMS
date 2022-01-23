@@ -3,7 +3,7 @@
 <ion-content #content>
   <ion-grid > 
     <ion-row> 
-      <ion-button class="button_style1"(click)="submit_new_track()"><ion-icon name="add-outline"></ion-icon> Submit New Track</ion-button>
+      <!--<ion-button class="button_style1"(click)="submit_new_track()"><ion-icon name="add-outline"></ion-icon> Submit New Track</ion-button>-->
     </ion-row>
    <ion-row style="padding-top:10px"> 
       <ion-col size="12" size-sm="4"  *ngFor="let track of track_info;let i = index">
@@ -21,7 +21,7 @@
                     <ion-col size="8">
                       <div class="user_info">Uploaded on {{track.track_added}}</div>
                       <div class="user_info" style="padding-top:10px">Language : {{track.track_language}}</div>
-                      <div class="user_info">Genre : {{track.track_genre}}</div>
+                      <div class="user_info">Genre : {{track.track_genre}} <font *ngIf="track.track_genre == 'others' && track.others_genre != ''"> ({{track.others_genre}})</font></div>
                       <div class="user_info">Status : 
                         <font *ngIf="track.track_approve==true" style="color:#00ff00">Approved</font>
                         <font *ngIf="track.track_reject==true && track.track_approve==false" style="color:#ff0000">Rejected</font>
@@ -154,7 +154,7 @@
                   <ion-col size="12" size-sm="8">
                         <!--<div class="track_info">Uploaded on {{selected_track_info.track_added.toDate().toDateString() }}</div>-->
                         <div class="track_info">Language : {{selected_track_info.track_language}}</div>
-                        <div class="track_info">Genre : {{selected_track_info.track_genre}}</div>
+                        <div class="track_info">Genre : {{selected_track_info.track_genre}}<font *ngIf="selected_track_info.track_genre == 'others' && selected_track_info.others_genre != ''"> ({{selected_track_info.others_genre}})</font></div>
                         <div class="track_info">Lyrics</div>
                         <div class="track_info_lyrics" [innerHtml]="selected_track_info.track_lyric"></div>
                   </ion-col>
@@ -189,15 +189,15 @@
                 </ion-row>
                 <ion-row>
                   <div class="column2" >
-                    <ion-col size="4" class="ctrl_btn1">
+                    <!--<ion-col size="4" class="ctrl_btn1">
                       <ion-icon name="create-outline" class="icon-button"></ion-icon>
                     <br><font style="font-size: 13px; color:#888888;">Edit</font>
-                    </ion-col>
-                    <ion-col size="4" class="ctrl_btn1" (click)="approve_new_request_modal(selected_track_info,selected_track_info.track_author)">
+                    </ion-col>-->
+                    <ion-col size="6" class="ctrl_btn1" (click)="approve_new_request_modal(selected_track_info,selected_track_info.track_author)">
                       <ion-icon name="checkmark-circle-outline" class="icon-button"></ion-icon>
                     <br><font style="font-size: 13px; color:#888888;">Approve</font>
                     </ion-col>
-                    <ion-col size="4" class="ctrl_btn1" (click)="delete_new_request_modal(selected_track_info.track_id,selected_track_info.track_author)">
+                    <ion-col size="6" class="ctrl_btn1" (click)="delete_new_request_modal(selected_track_info.track_id,selected_track_info.track_author)">
                       <ion-icon name="ban-outline" class="icon-button" ></ion-icon>
                     <br><font style="font-size: 13px; color:#888888;">Reject</font>
                     </ion-col>

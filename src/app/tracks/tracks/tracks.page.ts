@@ -34,6 +34,7 @@ export class TracksPage implements OnInit {
     track_language:"",
     track_genre:"",
     track_lyric:"",
+    others_genre:"",
   }
   ngOnInit() {
     this.localstorage.create();

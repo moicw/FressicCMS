@@ -43,19 +43,19 @@
                 </div>
               </div>
               <div class="column2" >
-                  <ion-col size="4" class="ctrl_btn" (click)="selected_track_to_play(i, track.track.preview)">
+                  <ion-col size="6" class="ctrl_btn" (click)="selected_track_to_play(i, track.track.preview)">
                     <ion-icon name="headset-outline" class="icon-button"></ion-icon>
                    <br><font style="font-size: 13px; color:#888888;">Preview</font>
                   </ion-col>
-                  <ion-col size="4" class="ctrl_btn1" (click)="selected_track_to_play(i, track.track.audio)">
+                  <ion-col size="6" class="ctrl_btn1" (click)="selected_track_to_play(i, track.track.audio)">
                     <ion-icon name="create-outline" class="icon-button"></ion-icon>
                    <br><font style="font-size: 13px; color:#888888;">Full Track</font>
                   </ion-col>
-                  <ion-col size="4" class="ctrl_btn1">
+                  <!--<ion-col size="4" class="ctrl_btn1">
                     <ion-icon name="remove-circle-outline" class="icon-button"></ion-icon>
                    <br><font style="font-size: 13px; color:#888888;">Edit</font>
                   </ion-col>
-                  <!--<ion-col size="3" class="ctrl_btn1">
+                  <ion-col size="3" class="ctrl_btn1">
                     <ion-icon name="ban-outline" class="icon-button" ></ion-icon>
                    <br><font style="font-size: 13px; color:#888888;">Delete</font>
                   </ion-col>-->
@@ -211,7 +211,7 @@
   <div class="modal-content">
     <div class="modal-header">
       <span class="close" (click)="close_edit_modal()">&times;</span>
-      <h4>Edit</h4>
+      <h4>Submit New Track</h4>
     </div>
     <div class="modal-body" style="height:82%">
       <ion-row  *ngIf="selected_track == null"> 
@@ -221,13 +221,15 @@
                     <ion-col size="12" size-sm="12">
                         <ion-row>
                           <ion-col size="7" size-sm="7">
+                            <div class="track_info_title" style="padding-bottom:5px;">Upload Track Cover Image</div>
                             <!--<div class="image_container">
                               <img [src]="upload_track_cover" style="height:80%;min-height: 200px;max-height: 200px;">
                               <ion-icon name="cloud-upload-outline" class="icon-button btn" (click)="reupload_artist()"></ion-icon>
                             </div>-->
                             
                             <!--<input type="file" id="artist_cover" style="display: none;" (change)="fileChanged($event)"/>-->
-                            <input type="file" (change)="fileChangeEvent($event)" accept="image/*"/>
+                            <input type="file" id="track_cover" (change)="fileChangeEvent($event)"  accept="image/*"/>
+                            <font style="padding-top:10px; font-size:12px; color:#ff0000" *ngIf="track_cover_err != ''">{{track_cover_err}}</font>
 
                             <div  style="width:100%">
                                 <image-cropper
@@ -276,9 +278,9 @@
           <ion-row style="width:100%;padding-left:5px;padding-right:5px;">
             <ion-col size="12" size-sm="12">
               <div class="track_info_title" style="padding-bottom:5px;">Title</div>
-              <ion-input class="form-input-theme1" [(ngModel)]="track.track_title" ></ion-input>
+              <ion-input id="track_title" class="form-input-theme1" [(ngModel)]="track.track_title" ></ion-input>
               <div class="track_info_title" style="padding-bottom:5px;">Language</div>
-      <select class="form-date-theme1" name="language" id="language" [(ngModel)]="track.track_language" >
+      <select class="form-date-theme1" name="language" id="track_language" [(ngModel)]="track.track_language" >
         <option value="Afrikaans">Afrikaans</option>
         <option value="Albanian">Albanian</option>
         <option value="Amharic">Amharic</option>
@@ -394,7 +396,7 @@
         <option value="Zulu">Zulu</option>
     </select>
               <div class="track_info_title" style="padding-bottom:5px;">Genre</div>
-              <select class="form-date-theme1" name="genre" id="genre" [(ngModel)]="track.track_genre">
+              <select class="form-date-theme1" name="genre" id="track_genre" [(ngModel)]="track.track_genre" (change)="selected_genre($event)">
                 <option value="blues">Blues</option>
                 <option value="country">Country</option>
                 <option value="dance">Dance</option>
@@ -414,12 +416,16 @@
                 <option value="soul">Soul</option>
                 <option value="others">Others</option>
                 </select>
+
+                <ion-input id="other_genre" aria-placeholder="others genre" class="form-input-theme1" style="display:none" [(ngModel)]="track.others_genre" ></ion-input>
+             
+
              <div class="track_info_title" style="padding-bottom:5px;">Preview Track (12s)</div>
-              <input type="file" id="preview_track" class="form-input-theme1" accept="audio/*">
+              <input type="file" id="preview_track" class="form-file-theme1" accept="audio/*">
               <div class="track_info_title" style="padding-bottom:5px;">Full Track</div>
-              <input type="file" id="full_track"class="form-input-theme1" accept="audio/*">
+              <input type="file" id="full_track"class="form-file-theme1" accept="audio/*">
               <div class="track_info_title" style="padding-bottom:5px;">Lyrics</div>
-               <ion-textarea class="form-input-theme1" rows="14" [(ngModel)]="track.track_lyric"></ion-textarea>
+               <ion-textarea class="form-input-theme1" id="track_lyric"  rows="14" [(ngModel)]="track.track_lyric"></ion-textarea>
               
                <!-- <div class="track_info_title" style="padding-bottom:5px;">Ethnic</div>
                 <select class="form-date-theme1" id="ethnic" name="ethnic"  [(ngModel)]="selected_artist.data.ethnic">
@@ -450,24 +456,11 @@
       </ion-row>
     </div>
     <div class="modal-footer">
-      <ion-row>
-        <div class="column2" >
-            <ion-col size="3" class="ctrl_btn"(click)="save_track()" >
-              <ion-icon name="create-outline" class="icon-button"></ion-icon>
-            <br><font style="font-size: 13px; color:#888888;">Save </font>
-            </ion-col>
-            <ion-col size="3" class="ctrl_btn1">
-              <ion-icon name="create-outline" class="icon-button"></ion-icon>
-            <br><font style="font-size: 13px; color:#888888;">Change Password</font>
-            </ion-col>
-           <ion-col size="3" class="ctrl_btn1" >
-              <ion-icon name="checkmark-circle-outline" class="icon-button"></ion-icon>
-            <br><font style="font-size: 13px; color:#888888;">Block</font>
-            </ion-col>
-            <ion-col size="3" class="ctrl_btn1" (click)="reject_newartist(selected_artist.id)">
-              <ion-icon name="ban-outline" class="icon-button" ></ion-icon>
-            <br><font style="font-size: 13px; color:#888888;">Reject</font>
-            </ion-col>
+      <ion-row  style="width:100%;">
+        <div style="text-align: right;">
+          <ion-button class="loadmore" (click)="save_track()"> 
+            Submit
+          </ion-button>
         </div>
       </ion-row>
     </div>

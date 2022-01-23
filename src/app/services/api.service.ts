@@ -811,7 +811,7 @@ export class ApiService {
    
     this.db.collection('track_new_request').doc(track.track_id).set(
       {
-        others_genre: "",
+        others_genre: track.others_genre,
         track_id: track.track_id,
         track_author: author,
         track_added: today,
@@ -826,7 +826,7 @@ export class ApiService {
       console.log(response);
       this.db.collection('users').doc(author).collection('track').doc(track.track_id).set(
         {
-          others_genre: "",
+          others_genre: track.others_genre,
           track_id: track.track_id,
           track_author: author,
           track_added: today,

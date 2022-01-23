@@ -85,6 +85,15 @@ ion-grid{
   background-color:var(--custom-color-theme3);
 }
 
+.form-file-theme1{
+  border-radius: 5px;
+  padding: 2px 10px !important;
+  margin-bottom: 10px;
+  border: 1px solid #555555;
+  color:#ffffff;
+  width:100% !important;
+
+}
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
   width: 20px;

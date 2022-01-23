@@ -34,7 +34,9 @@ export class MytracksPage implements OnInit {
     track_language:"",
     track_genre:"",
     track_lyric:"",
+    others_genre:""
   }
+  track_cover_err="";
   ngOnInit() {
     this.localstorage.create();
     this.localstorage.get('uid').then((result) => {
@@ -116,25 +118,114 @@ export class MytracksPage implements OnInit {
   }
   save_track()
   {
-  let id = this.makeid(20)
+   let validate = true;
+   if(this.track.track_title == "")
+   {
+      document.getElementById("track_title").style.borderColor= "#ff0000"; 
+      validate = false;
+   }
+   else
+   {
+    document.getElementById("track_title").style.borderColor= "#555555"; 
+   }
+   if(this.track.track_language == "")
+   {
+      document.getElementById("track_language").style.borderColor= "#ff0000"; 
+      validate = false;
+   }
+   else
+   {
+    document.getElementById("track_language").style.borderColor= "#555555"; 
+   }
+   if(this.track.track_genre == "")
+   {
+      document.getElementById("track_genre").style.borderColor= "#ff0000"; 
+      validate = false;
+   }
+   else if(this.track.track_genre == "others")
+   {
+      if(this.track.others_genre == "")
+      {
+        document.getElementById("other_genre").style.borderColor= "#ff0000"; 
+        validate = false;
+      }
+      else
+      {
+        document.getElementById("other_genre").style.borderColor= "#555555"; 
+      }
+    
+   }
+   else
+   {
+    document.getElementById("track_genre").style.borderColor= "#555555"; 
+   }
+   if((<HTMLInputElement>document.getElementById("preview_track")).value == "")
+   {
+      document.getElementById("preview_track").style.borderColor= "#ff0000"; 
+      validate = false;
+   }
+   else
+   {
+    document.getElementById("preview_track").style.borderColor= "#555555"; 
+   }
+   if((<HTMLInputElement>document.getElementById("full_track")).value == "")
+   {
+      document.getElementById("full_track").style.borderColor= "#ff0000"; 
+      validate = false;
+   }
+   else
+   {
+    document.getElementById("full_track").style.borderColor= "#555555"; 
+   }
+   if((<HTMLInputElement>document.getElementById("track_cover")).value == "")
+   {
+      this.track_cover_err = "No track cover";
+      validate = false;
+   }
+    else
+    {
+      this.track_cover_err = "";
+    }
+   if(this.track.track_lyric == "")
+   {
+      document.getElementById("track_lyric").style.borderColor= "#ff0000"; 
+      validate = false;
+   }
+   else
+   {
+      document.getElementById("track_lyric").style.borderColor= "#555555"; 
+   }
+   if(validate == true)
+   {
+   let id = this.makeid(20)
    const file = base64ToFile(this.croppedImage);   
    this.startPickedFileUpload(file,id,"cover_image");
-   this.compressImage(this.croppedImage, 300, 300).then(compressed => {
-    const new_file = base64ToFile(compressed.toString()); 
-    this.startPickedFileUpload(new_file,id,"cover_image_small");
-  })
-  this.previewFileUpload(id,"preview");
-  this.fullFileUpload(id,"audio");
-  this.track.track_id = id;
+      this.compressImage(this.croppedImage, 300, 300).then(compressed => {
+        const new_file = base64ToFile(compressed.toString()); 
+        this.startPickedFileUpload(new_file,id,"cover_image_small");
+      })
+    this.previewFileUpload(id,"preview");
+    this.fullFileUpload(id,"audio");
+    this.track.track_id = id;
    //{
-   this.api.add_new_track(this.artist_uid,this.track).then((user_stat) => {
-      
-      this.close_edit_modal();
-      console.log(user_stat);
-      this.ngOnInit();
-    }, (err) => {
-          console.log()  
-    });
+    this.api.add_new_track(this.artist_uid,this.track).then((user_stat) => {
+        
+        this.close_edit_modal();
+        console.log(user_stat);
+        this.ngOnInit();
+      }, (err) => {
+            console.log()  
+      });
+
+      this.track ={
+        track_id:"",
+        track_title:"",
+        track_language:"",
+        track_genre:"",
+        track_lyric:"",
+        others_genre:""
+      }
+    }
   }
   compressImage(src, newX, newY) {
     return new Promise((res, rej) => {
@@ -184,7 +275,14 @@ export class MytracksPage implements OnInit {
   close_edit_modal()
   {
     document.getElementById("edit_modal").style.display =  "none";
-  
+    this.track ={
+        track_id:"",
+        track_title:"",
+        track_language:"",
+        track_genre:"",
+        track_lyric:"",
+        others_genre:""
+      }
   }
   
   
@@ -418,7 +516,18 @@ export class MytracksPage implements OnInit {
   {
    document.getElementById("artist_cover").click();
   }
-
+  selected_genre(e)
+  {
+    if(e.target.value == "others")
+    {
+      document.getElementById("other_genre").style.display="block";
+    }
+    else
+    {
+      this.track.others_genre = "";
+      document.getElementById("other_genre").style.display="none";
+    }
+  }
   fileChanged(event) {
     const files = event.target.files;
     console.log(files);
@@ -466,6 +575,15 @@ export class MytracksPage implements OnInit {
     this.selected_track = null;
     document.getElementById("edit_modal").style.display =  "block";
     console.log(this.track);
+   
+    document.getElementById("track_title").style.borderColor= "#555555"; 
+    document.getElementById("track_language").style.borderColor= "#555555"; 
+    document.getElementById("track_genre").style.borderColor= "#555555"; 
+    document.getElementById("other_genre").style.borderColor= "#555555"; 
+    document.getElementById("preview_track").style.borderColor= "#555555"; 
+    document.getElementById("full_track").style.borderColor= "#555555"; 
+    this.track_cover_err = "";
+    document.getElementById("track_lyric").style.borderColor="#555555"
    
   }
   imageChangedEvent: any = '';
