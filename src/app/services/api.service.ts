@@ -399,7 +399,7 @@ export class ApiService {
     
         
       
-        this.db.collection('artist_musics').doc(author.id).collection('musics').doc(track.trackid).set(
+        this.db.collection('artist_musics').doc(author.uid).collection('musics').doc(track.trackid).set(
           {
             audioURL: track.track.audio,
             authorID: author.uid,

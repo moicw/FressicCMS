@@ -34,12 +34,13 @@
             "styles": ["src/theme/variables.scss", "src/global.scss"],
             "scripts": [],
             "aot": false,
-            "vendorChunk": true,
+            "vendorChunk": false,
             "extractLicenses": false,
             "buildOptimizer": false,
             "sourceMap": true,
+            "outputHashing": "all",
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": false
           },
           "configurations": {
             "production": {
