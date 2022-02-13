@@ -13,6 +13,7 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { DatePipe } from '@angular/common'
 //import { ImageCropperModule } from 'ngx-image-cropper';
 
 /*const config = {
@@ -50,7 +51,7 @@ const config = {
     AngularFireAuthModule, // auth
     AngularFireStorageModule // storage
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },{provide: LocationStrategy, useClass: HashLocationStrategy}],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },{provide: LocationStrategy, useClass: HashLocationStrategy},DatePipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

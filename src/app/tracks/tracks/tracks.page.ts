@@ -41,18 +41,23 @@ export class TracksPage implements OnInit {
     this.localstorage.get('uid').then((result) => {
      let uid = result;
      this.artist_uid = uid;
-     this.api.get_new_request_track(uid).then((result_track) => {
-      this.track_info = result_track;
-      console.log(this.track_info);
-      for(let i = 0; i < this.track_info.length; i++)
+
+     
+     this.api.get_new_request_track(uid).then((result) => {
+      this.lastResponse = result["lastResponse"];
+      this.track_info = result["data"];
+      let data = this.track_info;
+      //console.log(data[0].track_author);
+      for(let i = 0; i < data.length; i++)
       {
-        let track_id = this.track_info[i];
-       
-        this.api.getTrackLink(track_id["track_author"],track_id["trackid"]).then((result_tracklink) => {
+        let track = data[i];
+        console.log(track.data);
+        this.api.getTrackLink(track.data.track_author,track.data.track_id).then((result_tracklink) => {
           let track_list:any;
           track_list = result_tracklink;
         
-         track_id["track"] =result_tracklink;
+          track.data.track =result_tracklink;
+          console.log(this.track_info);
          }, (err) => {
           
          });
@@ -70,14 +75,38 @@ export class TracksPage implements OnInit {
 
   load_more()
   {
-    this.api.nextApprovedArtistPage(this.lastResponse).then((result) => {
+    console.log("test");
+    this.api.nextTrackPage(this.lastResponse).then((result) => {
       console.log(result);
       this.lastResponse = result["lastResponse"];
+      
       let data = result["data"];
-      for(let i = 0; i< data.length;i++)
+
+      if(data.length > 0)
       {
-        this.user_info.push(data[i]);
+        for(let i = 0; i < data.length; i++)
+        {
+          let track = data[i];
+          console.log(track.data);
+          this.api.getTrackLink(track.data.track_author,track.data.track_id).then((result_tracklink) => {
+            let track_list:any;
+            track_list = result_tracklink;
+          
+            track.data.track =result_tracklink;
+            console.log(this.track_info);
+            this.track_info.push(track);
+           }, (err) => {
+            
+           });
+           
+        }
       }
+      else
+      {
+        console.log("hide");
+        (<HTMLElement>document.getElementById("loadmore")).style.visibility = "hidden";
+      }
+      
       
     }, (err) => {
       
@@ -272,7 +301,7 @@ export class TracksPage implements OnInit {
           handler: () => {
             this.api.delete_new_request(musicid,authorid).then((user_stat) => {
               this.api.read_artist(authorid).then((user_stat) => {
-                this.api.sendemail_data(user_stat["email"],"Track Reject","Hello Artist,  \nWe are sorry to inform that your track have been rejected. \nThanks").then((result) => {
+                this.api.sendemail_data(user_stat["email"],"Track Reject","Hello "+user_stat["name"]+",  <br><br>We are sorry to inform that your music has been rejected. <br><br>Thanks").then((result) => {
                   //this.loading.dismiss();
                   
                   this.ngOnInit();
@@ -316,7 +345,7 @@ export class TracksPage implements OnInit {
           text: 'OK',
           handler: () => {
             this.api.delete_new_request(musicid,authorid).then((user_stat) => {
-              this.api.sendemail_data(user_stat["email"],"Track Reject","Hello Artist,  \nWe are sorry to inform that your track have been rejected. \nThanks").then((result) => {
+              this.api.sendemail_data(user_stat["email"],"Track Reject","Hello "+user_stat["name"]+",  <br><br>We are sorry to inform that your music has been rejected. <br><br>Thanks").then((result) => {
                 //this.loading.dismiss();
                 
                 this.ngOnInit();
@@ -354,11 +383,11 @@ export class TracksPage implements OnInit {
         }, {
           text: 'OK',
           handler: () => {
-
+            console.log(authorid)
             this.api.read_artist(authorid).then((user_stat) => {
               console.log(user_stat)
               this.api.approve_new_request(track,user_stat).then((result_stat) => {
-                this.api.sendemail_data(user_stat["email"],"Track Approved","Hello Artist,  \nCongratulations, Your track is approved. \nThanks").then((result) => {
+                this.api.sendemail_data(user_stat["email"],"Track Approved","Hello "+user_stat["name"]+",   <br><br>Congratulations, Your music is live now. <br>Thanks").then((result) => {
                   //this.loading.dismiss();
                   
                   this.ngOnInit();
@@ -401,11 +430,13 @@ export class TracksPage implements OnInit {
         }, {
           text: 'OK',
           handler: () => {
-
+            console.log(authorid)
+            
             this.api.read_artist(authorid).then((user_stat) => {
-              console.log(user_stat)
+             
               this.api.approve_new_request(track,user_stat).then((result_stat) => {
-                this.api.sendemail_data(user_stat["email"],"Track Approved","Hello Artist,  \nCongratulations, Your track is approved. \nThanks").then((result) => {
+                console.log(result_stat)
+                this.api.sendemail_data(user_stat["email"],"Track Approved","Hello "+user_stat["name"]+",  <br><br>Congratulations, Your music is live now. <br>Thanks").then((result) => {
                   //this.loading.dismiss();
                   
                   this.ngOnInit();

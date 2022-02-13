@@ -230,9 +230,47 @@ export class ApiService {
     });
     
   }
+
   get_new_request_track(uid)
   {
     return new Promise((resolve, reject) => {
+     
+      this.db.collection('track_new_request', ref => ref
+      .limit(this.variable.p_limit)
+    ).snapshotChanges().pipe(take(1))
+      .subscribe(response => {
+        let array_json:any = [];
+        if (!response.length) {
+          console.log("No Data Available");
+          return false;
+        }
+        this.firstInResponse = response[0].payload.doc;
+        this.lastInResponse = response[response.length - 1].payload.doc;
+        
+        this.tableData = [];
+        for (let item of response) {
+          let data_json:any = [];
+          data_json["id"] = item.payload.doc.id;
+          data_json["data"] = item.payload.doc.data();
+          this.tableData.push(data_json);
+        }
+        array_json["lastResponse"] = response[response.length - 1].payload.doc;
+        array_json["data"] = this.tableData;//response[response.length - 1].payload.doc;
+        //Initialize values
+        this.prev_strt_at = [];
+        console.log(array_json);
+       resolve(array_json);
+      
+      
+      }, error => {
+        reject(error)
+      });
+    });
+
+
+
+    
+    /*return new Promise((resolve, reject) => {
      
       this.db.collection("track_new_request").valueChanges({ idField: 'trackid' }).pipe(take(1)).subscribe(tracks => {
       
@@ -241,7 +279,7 @@ export class ApiService {
       }, (err) => {
         reject(err);
       });
-    });
+    });*/
     
   }
   //This is the function you call (put it in ngOnInit or something of the like) to get the filenames
@@ -399,19 +437,19 @@ export class ApiService {
     
         
       
-        this.db.collection('artist_musics').doc(author.uid).collection('musics').doc(track.trackid).set(
+        this.db.collection('artist_musics').doc(author.uid).collection('musics').doc(track.track_id).set(
           {
             audioURL: track.track.audio,
             authorID: author.uid,
             authorName: author.name,
             authorNameKeyword: name_keyword,
-            musicID: track.trackid,
+            musicID: track.track_id,
             previewURL: track.track.preview,
             songName: track.track_title,
             songNameKeyword: track_keyword,
           }
         ).then(response => {
-          this.db.collection('users').doc(author.uid).collection('track').doc(track.trackid).set(
+          this.db.collection('users').doc(author.uid).collection('track').doc(track.track_id).set(
             {
               track_approve: true
             }, { merge: true }
@@ -585,6 +623,23 @@ export class ApiService {
     });
   }
 
+  reject_tracks(author,track) {
+   
+    return new Promise((resolve, reject) => {
+      console.log(author);
+      this.db.collection('users').doc(author.id).collection('track').doc(track.trackid).set(
+        {
+          track_reject: true
+        }, { merge: true }
+      ).then(response => {
+        console.log(response);
+        resolve(response);
+      }).catch(error => {
+        console.log(error);
+      });
+    });
+  }
+
   approve_newartist(id)
   {
     return new Promise((resolve, reject) => {
@@ -620,7 +675,7 @@ export class ApiService {
           artist_reject: true
         }, { merge: true }
       ).then(response => {
-        console.log(response);
+       
         resolve(response);
       }).catch(error => {
         console.log(error);
@@ -637,7 +692,7 @@ export class ApiService {
       this.db.collection('users').doc(author.id).set(
         author.data
       ).then(response => {
-        console.log(response);
+        
         resolve(response);
       }).catch(error => {
         console.log(error);
@@ -678,7 +733,7 @@ export class ApiService {
   nextPage(lastResponse) {
     return new Promise((resolve, reject) => {
       this.db.collection('users', ref => ref
-      .limit(3)
+      .limit(this.variable.p_limit)
       .where('artist_verify', '==', false)
       .where('artist_reject', '==', false)
       .startAfter(lastResponse)
@@ -686,6 +741,10 @@ export class ApiService {
       .subscribe(response => {
         let array_json:any = [];
         if (!response.length) {
+          array_json["data"]=[];
+          console.log(response);
+          console.log("close");
+          resolve(array_json);
           return;
         }
 
@@ -717,10 +776,57 @@ export class ApiService {
     });
     
   }
+
+  nextTrackPage(lastResponse) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('track_new_request', ref => ref
+      .limit(this.variable.p_limit)
+    
+      .startAfter(lastResponse)
+    ).snapshotChanges().pipe(take(1))
+      .subscribe(response => {
+        let array_json:any = [];
+        if (!response.length) {
+          array_json["data"]=[];
+          console.log(response);
+          console.log("close");
+          resolve(array_json);
+          return;
+        }
+
+        this.firstInResponse = response[0].payload.doc;
+        this.lastInResponse = response[response.length - 1].payload.doc;
+        this.tableData = [];
+        for (let item of response) {
+          let data_json:any = [];
+          data_json["id"] = item.payload.doc.id;
+          data_json["data"] = item.payload.doc.data();
+          this.tableData.push(data_json);
+        }
+        array_json["lastResponse"] = response[response.length - 1].payload.doc;
+        array_json["data"] = this.tableData;//response[response.length - 1].payload.doc;
+        //Initialize values
+        this.prev_strt_at = [];
+       
+       resolve(array_json);
+       
+
+        //this.push_prev_startAt(this.firstInResponse);
+
+       
+      }, error => {
+       
+      });
+
+      
+    });
+    
+  }
+
   nextApprovedArtistPage(lastResponse) {
     return new Promise((resolve, reject) => {
       this.db.collection('users', ref => ref
-      .limit(3)
+      .limit(this.variable.p_limit)
       .where('artist_verify', '==', true)
       .where('artist_reject', '==', false)
       .where('type', '==', "Artist")
@@ -729,9 +835,14 @@ export class ApiService {
       .subscribe(response => {
         let array_json:any = [];
         if (!response.length) {
+          array_json["data"]=[];
+          console.log(response);
+          console.log("close");
+          resolve(array_json);
           return;
         }
-
+        console.log(response);
+        console.log("con");
         this.firstInResponse = response[0].payload.doc;
         this.lastInResponse = response[response.length - 1].payload.doc;
         this.tableData = [];

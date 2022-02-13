@@ -28,6 +28,7 @@ export class MytracksPage implements OnInit {
   selected_ethnic:any;
   upload_track_cover:any;
   artist_uid:any;
+  not_cover_err:any;
   track ={
     track_id:"",
     track_title:"",
@@ -75,10 +76,19 @@ export class MytracksPage implements OnInit {
       console.log(result);
       this.lastResponse = result["lastResponse"];
       let data = result["data"];
-      for(let i = 0; i< data.length;i++)
+      if(data.length > 0)
       {
-        this.user_info.push(data[i]);
+        for(let i = 0; i< data.length;i++)
+        {
+          this.user_info.push(data[i]);
+        }
       }
+      else
+      {
+        console.log("hide");
+        (<HTMLElement>document.getElementById("loadmore")).style.visibility = "hidden";
+      }
+     
       
     }, (err) => {
       
@@ -195,6 +205,37 @@ export class MytracksPage implements OnInit {
    {
       document.getElementById("track_lyric").style.borderColor= "#555555"; 
    }
+
+   if((<HTMLIonCheckboxElement>document.getElementById("not_cover")).checked == false)
+   {
+      document.getElementById("not_cover_checkbox").style.background= "#ff0000"; 
+      validate = false;
+   }
+   else
+   {
+      document.getElementById("not_cover_checkbox").style.background= "#000000"; 
+   }
+
+   if((<HTMLIonCheckboxElement>document.getElementById("agree_term")).checked == false)
+   {
+      document.getElementById("agree_term_checkbox").style.background= "#ff0000"; 
+      validate = false;
+   }
+   else
+   {
+      document.getElementById("agree_term_checkbox").style.background= "#000000"; 
+   }
+
+   if((<HTMLIonCheckboxElement>document.getElementById("agree_upload")).checked == false)
+   {
+      document.getElementById("agree_upload_checkbox").style.background= "#ff0000"; 
+      validate = false;
+   }
+   else
+   {
+      document.getElementById("agree_upload_checkbox").style.background= "#000000"; 
+   }
+
    if(validate == true)
    {
    let id = this.makeid(20)
@@ -584,7 +625,9 @@ export class MytracksPage implements OnInit {
     document.getElementById("full_track").style.borderColor= "#555555"; 
     this.track_cover_err = "";
     document.getElementById("track_lyric").style.borderColor="#555555"
-   
+    document.getElementById("not_cover_checkbox").style.background= "#000000"; 
+    document.getElementById("agree_term_checkbox").style.background= "#000000"; 
+    document.getElementById("agree_upload_checkbox").style.background= "#000000";    
   }
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -685,4 +728,93 @@ export class MytracksPage implements OnInit {
           rotate: this.rotation
       };
   }
+
+  check_track_s(event)
+  {
+    const target = event.target;
+        if (target.files && target.files[0]) {
+
+          /*Maximum allowed size in bytes
+            5MB Example
+            Change first operand(multiplier) for your needs*/
+          //document.getElementById('track_preview_msg').innerHTML = "";
+          const maxAllowedSize = 2*1024*1024;
+          if (target.files[0].size > maxAllowedSize) {
+           
+           // document.getElementById('track_preview_msg').innerHTML = "Preview Track should not more than 2MB";
+            
+            target.value = ''
+          }
+          var file = target.files[0];
+          var audioMaxTime = 13; //minutes:seconds   //audio
+          var reader = new FileReader();
+          reader.onload = function(e) {
+          var audioElement = document.createElement('audio');
+          let getTime = 0;
+          audioElement.src = (e.target.result).toString();
+          var timer = setInterval(function() {
+            if (audioElement.readyState === 4) {
+              console.log(audioElement.duration)
+              getTime = audioElement.duration;
+              //getTime = this.secondsToTime(audioElement.duration);
+              //console.log(getTime)
+              if (getTime > audioMaxTime) {
+               
+                //alert('1 minutes audio only')
+                //$('#vid').val("");
+                //document.getElementById('track_preview_msg').innerHTML = "Preview Track must 12 Seconds";
+                alert("Preview Track must 12 Seconds")
+                target.value = ''
+              }
+              else if (getTime < (audioMaxTime-1)) {
+               
+                //alert('1 minutes audio only')
+                //$('#vid').val("");
+                //document.getElementById('track_preview_msg').innerHTML = "Preview Track must 12 Seconds";
+                alert("Preview Track must 12 Seconds")
+                target.value = ''
+              }
+              clearInterval(timer);
+            }
+          }, 500)
+          }
+          if (file) {
+            reader.readAsDataURL(file);
+
+          } else {
+            //alert('nofile');
+            
+          }
+        }
+  }
+  
+     secondsToTime(in_seconds) {
+      
+      let time = '';
+      in_seconds = parseFloat(in_seconds.toFixed(2));
+
+      let hours_str="";
+      let minutes_str="";
+      let seconds_str="";
+      let hours = Math.floor(in_seconds / 3600);
+      let minutes = Math.floor((in_seconds - (hours * 3600)) / 60);
+      let seconds = in_seconds - (hours * 3600) - (minutes * 60);
+      //seconds = Math.floor( seconds );
+      seconds_str = seconds.toFixed(0);
+
+      if (hours < 10) {
+        hours_str = "0" + hours;
+      }
+      if (minutes < 10) {
+        minutes_str = "0" + minutes;
+      }
+      if (seconds < 10) {
+        seconds_str = "0" + seconds;
+      }
+      time = minutes_str + ':' + seconds_str;
+
+      console.log(time)
+      return time;
+
+      }
 }

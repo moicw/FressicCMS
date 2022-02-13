@@ -54,7 +54,7 @@
       
     </ion-row>
     <ion-row style="width:100%; padding-top:20px" class="item_center">
-      <ion-button class="loadmore" (click)="load_more()"> 
+      <ion-button class="loadmore" id="loadmore" (click)="load_more()"> 
         Load More
       </ion-button>
     </ion-row>
@@ -250,7 +250,7 @@
                         <div class="track_info_title" style="padding-bottom:5px;">Email</div>
                         <ion-input class="form-input-theme1" [(ngModel)]="selected_artist.data.email"></ion-input>
                         <div class="track_info_title" style="padding-bottom:5px;">DOB</div>
-                        <input type="date" class="form-date-theme1"  [(ngModel)]="selected_artist.data.dob">
+                        <input type="date" class="form-date-theme1"  [(ngModel)]="temp_date">
                         
                     </ion-col>
                   </ion-row>

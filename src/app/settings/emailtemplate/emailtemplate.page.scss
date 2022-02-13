@@ -38,17 +38,16 @@
 /** Audio class **/
 audio
 {
-    height:18px;
+    height:30px;
     padding:0px;
-
 }
 .player_bg{
   background-color: var(--custom-color-theme1);
-  padding-top:3px;
+  padding:0px;
 }
 audio::-webkit-media-controls-enclosure {
     background-color: var(--custom-color-theme1);
-    //border-radius:50px;
+  
 }
 audio::-webkit-media-controls-play-button {
     background-color: var(--custom-color-theme1);

@@ -12,20 +12,20 @@
             <div style="width:100%;">
               <div class="column1" style="width:100%;min-height:180px">
                 <div style="min-width:100%" >
-                  <div class="user_title">{{track.track_title}}</div>
+                  <div class="user_title">{{track.data.track_title}}</div>
                   <div style="min-width:100%">
                     <div class="column2" >
                     <ion-col size="4" >
-                      <img [src]="track.track.cover" style="width:100%">
+                      <img [src]="track.data.track.cover" style="width:100%">
                     </ion-col>
                     <ion-col size="8">
-                      <div class="user_info">Uploaded on {{track.track_added}}</div>
-                      <div class="user_info" style="padding-top:10px">Language : {{track.track_language}}</div>
-                      <div class="user_info">Genre : {{track.track_genre}} <font *ngIf="track.track_genre == 'others' && track.others_genre != ''"> ({{track.others_genre}})</font></div>
+                      <div class="user_info">Uploaded on {{track.data.track_added}}</div>
+                      <div class="user_info" style="padding-top:10px">Language : {{track.data.track_language}}</div>
+                      <div class="user_info">Genre : {{track.data.track_genre}} <font *ngIf="track.data.track_genre == 'others' && track.data.others_genre != ''"> ({{track.data.others_genre}})</font></div>
                       <div class="user_info">Status : 
-                        <font *ngIf="track.track_approve==true" style="color:#00ff00">Approved</font>
-                        <font *ngIf="track.track_reject==true && track.track_approve==false" style="color:#ff0000">Rejected</font>
-                        <font *ngIf="track.track_reject==false && track.track_approve==false" style="color: #888888">Pending</font>
+                        <font *ngIf="track.data.track_approve==true" style="color:#00ff00">Approved</font>
+                        <font *ngIf="track.data.track_reject==true && track.data.track_approve==false" style="color:#ff0000">Rejected</font>
+                        <font *ngIf="track.data.track_reject==false && track.data.track_approve==false" style="color: #888888">Pending</font>
                       </div>
                     </ion-col>
                     </div>
@@ -48,7 +48,7 @@
                       <ion-row style="width:100%" class="player_bg">
                         <ion-col size="12" size-sm="12" style="padding:0px">
                           <div style="padding:0px">
-                            <audio id="audio_player_preview" controls style="width:100% !important;padding:0px" (play)="audioPlay($event,track.track.preview)" controls preload="none" controlsList="nodownload noplaybackrate" [src]="track.track.preview" type="audio/mp4">
+                            <audio id="audio_player_preview" controls style="width:100% !important;padding:0px" (play)="audioPlay($event,track.track.preview)" controls preload="none" controlsList="nodownload noplaybackrate" [src]="track.data.track.preview" type="audio/mp4">
                              Your browser does not support the audio element.
                               </audio>
                           </div>
@@ -62,7 +62,7 @@
                       <ion-row style="width:100%" class="player_bg">
                         <ion-col size="12" size-sm="12" style="padding:0px">
                           <div style="padding:0px">
-                            <audio id="audio_player" controls style="width:100% !important;padding:0px" (play)="audioPlay($event,track.track.audio)" controls preload="none" controlsList="nodownload noplaybackrate" [src]="track.track.audio" type="audio/mp4">
+                            <audio id="audio_player" controls style="width:100% !important;padding:0px" (play)="audioPlay($event,track.track.audio)" controls preload="none" controlsList="nodownload noplaybackrate" [src]="track.data.track.audio" type="audio/mp4">
                               Your browser does not support the audio element.
                               </audio>
                           </div>
@@ -74,15 +74,15 @@
                 </div>
               </div>
               <div class="column2" >
-                  <ion-col size="4" class="ctrl_btn"  (click)="track_detail(track)">
+                  <ion-col size="4" class="ctrl_btn"  (click)="track_detail(track.data)">
                     <ion-icon name="list-circle-outline" class="icon-button"></ion-icon>
                    <br><font style="font-size: 13px; color:#888888;">Details</font>
                   </ion-col>
-                  <ion-col size="4" class="ctrl_btn1"  (click)="approve_new_request(track,track.track_author)">
+                  <ion-col size="4" class="ctrl_btn1"  (click)="approve_new_request(track.data,track.data.track_author)">
                     <ion-icon name="checkmark-circle-outline" class="icon-button"></ion-icon>
                   <br><font style="font-size: 13px; color:#888888;">Approve</font>
                   </ion-col>
-                  <ion-col size="4" class="ctrl_btn1" (click)="delete_new_request(track.track_id,track.track_author)">
+                  <ion-col size="4" class="ctrl_btn1" (click)="delete_new_request(track.data.track_id,track.data.track_author)">
                     <ion-icon name="ban-outline" class="icon-button" ></ion-icon>
                   <br><font style="font-size: 13px; color:#888888;">Reject</font>
                 </ion-col>
@@ -99,7 +99,7 @@
       
     </ion-row>
     <ion-row style="width:100%; padding-top:20px" class="item_center">
-      <ion-button class="loadmore" (click)="load_more()"> 
+      <ion-button class="loadmore" id="loadmore" (click)="load_more()"> 
         Load More
       </ion-button>
     </ion-row>

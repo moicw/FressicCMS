@@ -7,14 +7,14 @@ import { Storage } from '@ionic/storage-angular';
 import { AlertController,NavController } from '@ionic/angular';
 import { DatePipe } from '@angular/common'
 @Component({
-  selector: 'app-artist-approved',
-  templateUrl: './artist-approved.page.html',
-  styleUrls: ['./artist-approved.page.scss'],
+  selector: 'app-emailtemplate',
+  templateUrl: './emailtemplate.page.html',
+  styleUrls: ['./emailtemplate.page.scss'],
 })
-export class ArtistApprovedPage implements OnInit {
-  profileUrl: Observable<string | null>;  
+export class EmailtemplatePage implements OnInit {
+  
   constructor(public datepipe: DatePipe, private navCtrl:NavController,private alertController:AlertController, private localstorage:Storage,private storage: AngularFireStorage,private api: ApiService) { }
-  header_title="Approved Artist";
+  header_title="Email Templates";
   filelist = []
   user_info:any;
   lastResponse:any = [];
@@ -24,9 +24,9 @@ export class ArtistApprovedPage implements OnInit {
   selected_track_info:any;
   selected_artist:any;
   selected_ethnic:any;
-  temp_date="";
+  temp_date = "";
   ngOnInit() {
-    this.api.load_approvedartistlist().then((result) => {
+    this.api.load_newartistlist().then((result) => {
      
       this.lastResponse = result["lastResponse"];
       this.user_info = result["data"];
@@ -38,22 +38,13 @@ export class ArtistApprovedPage implements OnInit {
 
   load_more()
   {
-    this.api.nextApprovedArtistPage(this.lastResponse).then((result) => {
+    this.api.nextPage(this.lastResponse).then((result) => {
       console.log(result);
       this.lastResponse = result["lastResponse"];
       let data = result["data"];
-    
-      if(data.length > 0)
+      for(let i = 0; i< data.length;i++)
       {
-        for(let i = 0; i< data.length;i++)
-        {
-          this.user_info.push(data[i]);
-        }
-      }
-      else
-      {
-        console.log("hide");
-        (<HTMLElement>document.getElementById("loadmore")).style.visibility = "hidden";
+        this.user_info.push(data[i]);
       }
       
     }, (err) => {
@@ -66,7 +57,7 @@ export class ArtistApprovedPage implements OnInit {
   edit_artist(uid,user)
   {
     this.selected_artist = user;
-    console.log(this.selected_artist);
+    console.log(this.selected_artist)
     this.temp_date = this.datepipe.transform((this.selected_artist.data.dob).toLocaleString(), 'yyyy-dd-MM');
     console.log(this.temp_date.toString())
     document.getElementById("edit_modal").style.display =  "block";
@@ -129,7 +120,7 @@ export class ArtistApprovedPage implements OnInit {
   }
   
   
-  async approve_newartist(uid)
+  approve_newartist(uid)
   {
     let any_track_approve = false;
     this.api.get_artist_request_track(uid).then((result_track) => {
@@ -144,10 +135,17 @@ export class ArtistApprovedPage implements OnInit {
           any_track_approve = true;
         }
       }
-      
+      this.approve_message_box(any_track_approve,uid)
     
   
     });
+    
+
+    
+
+  }
+  async approve_message_box(any_track_approve,uid)
+  {
     if(any_track_approve == false)
     {
       const alert = await this.alertController.create({
@@ -202,9 +200,6 @@ export class ArtistApprovedPage implements OnInit {
       });
       await alert.present();
     }
-
-    
-
   }
   async reject_newartist(uid)
   {
@@ -306,6 +301,7 @@ export class ArtistApprovedPage implements OnInit {
             //this.selected_track_info.track_approve =true;
          
             this.api.approve_tracks(this.selected_artist,this.selected_track_info).then((user_stat) => {
+              console.log("approve")
               this.ngOnInit();
               this.close_music_modal();
             }, (err) => {

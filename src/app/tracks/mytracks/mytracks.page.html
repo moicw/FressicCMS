@@ -28,7 +28,7 @@
                       </div>
                     </ion-col>
                     </div>
-                    <div>
+                    <!--<div>
                       <ion-row style="width:100%" class="player_bg">
                         <ion-col size="12" size-sm="12" style="padding:0px">
                           <div style="padding:0px">
@@ -38,11 +38,39 @@
                           </div>
                         </ion-col>
                       </ion-row>
-                    </div>
+                    </div>-->
+                    <ion-row style="width:100%" >
+                      <ion-col size="12" size-sm="12" style="padding:0px">
+                        <div class="track_info">Preview</div>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row style="width:100%" class="player_bg">
+                      <ion-col size="12" size-sm="12" style="padding:0px">
+                        <div style="padding:0px">
+                          <audio id="audio_player_preview" controls style="width:100% !important;padding:0px" (play)="audioPlay($event,track.track.preview)" controls preload="none" controlsList="nodownload noplaybackrate" [src]="track.track.preview" type="audio/mp4">
+                           Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row style="width:100%" >
+                      <ion-col size="12" size-sm="12" style="padding:0px">
+                        <div class="track_info">Full Track</div>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row style="width:100%" class="player_bg">
+                      <ion-col size="12" size-sm="12" style="padding:0px">
+                        <div style="padding:0px">
+                          <audio id="audio_player" controls style="width:100% !important;padding:0px" (play)="audioPlay($event,track.track.audio)" controls preload="none" controlsList="nodownload noplaybackrate" [src]="track.track.audio" type="audio/mp4">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                      </ion-col>
+                    </ion-row>
                   </div>
                 </div>
               </div>
-              <div class="column2" >
+              <!--<div class="column2" >
                   <ion-col size="6" class="ctrl_btn" (click)="selected_track_to_play(i, track.track.preview)">
                     <ion-icon name="headset-outline" class="icon-button"></ion-icon>
                    <br><font style="font-size: 13px; color:#888888;">Preview</font>
@@ -51,15 +79,8 @@
                     <ion-icon name="create-outline" class="icon-button"></ion-icon>
                    <br><font style="font-size: 13px; color:#888888;">Full Track</font>
                   </ion-col>
-                  <!--<ion-col size="4" class="ctrl_btn1">
-                    <ion-icon name="remove-circle-outline" class="icon-button"></ion-icon>
-                   <br><font style="font-size: 13px; color:#888888;">Edit</font>
-                  </ion-col>
-                  <ion-col size="3" class="ctrl_btn1">
-                    <ion-icon name="ban-outline" class="icon-button" ></ion-icon>
-                   <br><font style="font-size: 13px; color:#888888;">Delete</font>
-                  </ion-col>-->
-              </div>
+                 
+              </div>-->
             </div>
            
           </div>
@@ -71,7 +92,7 @@
       
     </ion-row>
     <ion-row style="width:100%; padding-top:20px" class="item_center">
-      <ion-button class="loadmore" (click)="load_more()"> 
+      <ion-button class="loadmore"  id="loadmore"(click)="load_more()"> 
         Load More
       </ion-button>
     </ion-row>
@@ -421,12 +442,28 @@
              
 
              <div class="track_info_title" style="padding-bottom:5px;">Preview Track (12s)</div>
-              <input type="file" id="preview_track" class="form-file-theme1" accept="audio/*">
+              <input type="file" id="preview_track" class="form-file-theme1"(change)="check_track_s($event)"  accept="audio/*">
               <div class="track_info_title" style="padding-bottom:5px;">Full Track</div>
               <input type="file" id="full_track"class="form-file-theme1" accept="audio/*">
               <div class="track_info_title" style="padding-bottom:5px;">Lyrics</div>
                <ion-textarea class="form-input-theme1" id="track_lyric"  rows="14" [(ngModel)]="track.track_lyric"></ion-textarea>
-              
+               <table style="padding:0px;border:0px;color:#ffffff" >
+                <tr>
+                    <td style="padding:5px;width:10px;border:0px;border:1px"><div id="not_cover_checkbox" style="background-color:#000000;padding-left:2px;padding-right:2px;"><input required type="checkbox" id="not_cover" name="not_cover" value="not_cover" ></div></td>
+                    <td style="padding:5px;border:0px;border:0px;padding-left:20px;"><label for="not_cover">It is not a cover</label>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:5px;width:10px;border:0px;"><div  id="agree_term_checkbox"  style="background-color:#000000;padding-left:2px;padding-right:2px;"><input required type="checkbox" id="agree_term" name="agree_term" value="agree_term"></div></td>
+                    <td style="padding:5px;border:0px;border:0px;padding-left:20px;"><label for="agree_term">I agree to the <a href="https://fressicentertainment.com/terms-conditions/">Terms & Conditions</a> and <a href="https://fressicentertainment.com/privacy-policy/">Privacy Policy</a>.</label>
+                    </td>
+                </tr>
+                  <tr>
+                    <td style="padding:5px;width:10px;border:0px;"><div id="agree_upload_checkbox"   style="background-color:#000000;padding-left:2px;padding-right:2px;"><input required type="checkbox" id="agree_upload" name="agree_upload" value="agree_upload"></div></td>
+                    <td style="padding:5px;border:0px;border:0px;padding-left:20px;"><label for="agree_upload">I agree to the <a href="https://fressicentertainment.com/track-upload-agreement/">Track Upload Agreement</a>.</label>
+                    </td>
+                  </tr></table>
                <!-- <div class="track_info_title" style="padding-bottom:5px;">Ethnic</div>
                 <select class="form-date-theme1" id="ethnic" name="ethnic"  [(ngModel)]="selected_artist.data.ethnic">
                   <option value="asian">Asian</option>

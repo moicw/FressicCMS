@@ -34,11 +34,11 @@
                     <ion-icon name="create-outline" class="icon-button"></ion-icon>
                    <br><font style="font-size: 13px; color:#888888;">Edit</font>
                   </ion-col>
-                  <ion-col size="3" class="ctrl_btn1" (click)="approve_newartist(user)">
+                  <ion-col size="3" class="ctrl_btn1" (click)="approve_newartist(user.id)">
                     <ion-icon name="checkmark-circle-outline" class="icon-button"></ion-icon>
                    <br><font style="font-size: 13px; color:#888888;">Approve</font>
                   </ion-col>
-                  <ion-col size="3" class="ctrl_btn1" (click)="reject_newartist(user)">
+                  <ion-col size="3" class="ctrl_btn1" (click)="reject_newartist(user.id)">
                     <ion-icon name="ban-outline" class="icon-button" ></ion-icon>
                    <br><font style="font-size: 13px; color:#888888;">Reject</font>
                   </ion-col>
@@ -149,7 +149,7 @@
                         <ion-icon name="checkmark-circle-outline" class="icon-button"></ion-icon>
                       <br><font style="font-size: 13px; color:#888888;">Approve</font>
                       </ion-col>
-                      <ion-col size="4" class="ctrl_btn1" (click)="reject_newtrack()">
+                      <ion-col size="4" class="ctrl_btn1" >
                         <ion-icon name="ban-outline" class="icon-button" ></ion-icon>
                       <br><font style="font-size: 13px; color:#888888;">Reject</font>
                       </ion-col>
@@ -667,11 +667,11 @@
               <ion-icon name="create-outline" class="icon-button"></ion-icon>
             <br><font style="font-size: 13px; color:#888888;">Change Password</font>
             </ion-col>
-            <ion-col size="3" class="ctrl_btn1" (click)="approve_newartist(selected_artist)">
+            <ion-col size="3" class="ctrl_btn1" (click)="approve_newartist(selected_artist.id)">
               <ion-icon name="checkmark-circle-outline" class="icon-button"></ion-icon>
             <br><font style="font-size: 13px; color:#888888;">Approve</font>
             </ion-col>
-            <ion-col size="3" class="ctrl_btn1" (click)="reject_newartist(selected_artist)">
+            <ion-col size="3" class="ctrl_btn1" (click)="reject_newartist(selected_artist.id)">
               <ion-icon name="ban-outline" class="icon-button" ></ion-icon>
             <br><font style="font-size: 13px; color:#888888;">Reject</font>
             </ion-col>

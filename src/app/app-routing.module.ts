@@ -42,6 +42,10 @@ const routes: Routes = [
   {
     path: 'mytracks',
     loadChildren: () => import('./tracks/mytracks/mytracks.module').then( m => m.MytracksPageModule)
+  },
+  {
+    path: 'emailtemplate',
+    loadChildren: () => import('./settings/emailtemplate/emailtemplate.module').then( m => m.EmailtemplatePageModule)
   }
 ];
 
